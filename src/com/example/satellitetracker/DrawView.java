@@ -28,9 +28,10 @@ public class DrawView extends View {
 		canvas.drawPaint(paint);
 		
 		paint.setAntiAlias(false);
-		paint.setColor(Color.WHITE);
-		for(Point point : points)
+		for(Point point : points) {
+			paint.setColor(point.getColor());
 			canvas.drawCircle(point.getX()*40, point.getY()*10, 20, paint);
+		}
 		paint.setColor(Color.RED);
 	}
 	

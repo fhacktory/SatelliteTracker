@@ -8,15 +8,17 @@ import com.example.satellitetracker.Point;
 import com.example.socket.ConnectionSocket;
 
 
-public class Sky {
+public class Sky implements SkyListened{
 
     private Vector<Satellite> sat = new Vector<Satellite>();
     private Vector<Point> points = new Vector<Point>();
+	private Vector<SkyListener> listeners = new Vector<SkyListener>();
+
 
     public Sky() {
     }
 
-    public boolean updateSatellite(int id, double longitude, double latitude) {
+    public boolean updateSatellite(int id, double longitude, double latitude, String country) {
       	    	
         for(int i= 0; i<sat.size(); i++) {
         	
@@ -28,7 +30,9 @@ public class Sky {
         	}
         }
         
-        sat.add(new Satellite(id, longitude, latitude));
+        sat.add(new Satellite(id, longitude, latitude, country));
+        
+        updateListener(this);
         return false;
     }
     
@@ -50,6 +54,7 @@ public class Sky {
     		
     	}
     	
+    	updateListener(this);
     }
         
     public Vector<Point> getPoints() {
@@ -68,5 +73,23 @@ public class Sky {
 		return str;
 	}
 
+	@Override
+	public void addListener(SkyListener listener) {
+		listeners.add(listener);
+		
+	}
+
+	@Override
+	public void deleteListener(SkyListener listener) {
+		listeners.remove(listener);
+		
+	}
+
+	@Override
+	public void updateListener(Sky sky) {
+		for(SkyListener listener : listeners)
+			listener.updateSky(sky);
+		
+	}
 
 }

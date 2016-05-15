@@ -54,8 +54,9 @@ public class MainActivity extends Activity implements GpsStatus.NmeaListener, Sk
 	    lm.addNmeaListener(this);
 
 	    // Setup satellite manager
-	    manager = new SatelliteManager();
-	    manager.addListener(this);
+	    Sky sky = new Sky();
+	    manager = new SatelliteManager(sky);
+	    sky.addListener(this);
 	    
 	    // Setup Sensor
 	    sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);

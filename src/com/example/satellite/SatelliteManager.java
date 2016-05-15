@@ -1,21 +1,19 @@
 package com.example.satellite;
 
-import java.util.Vector;
-
 import android.util.Log;
 
-public class SatelliteManager implements SkyListened {
+public class SatelliteManager {
 	
-	private Sky sky = new Sky();
-
-		
-	private Vector<SkyListener> listeners = new Vector<SkyListener>();
+	private Sky sky;
 	
-	public SatelliteManager() {
+	public SatelliteManager(Sky sky) {
+		this.sky = sky;
 	}
 	
 	public void NmeaParser(String nmea) {
 		String tab[] = nmea.split(",");
+		String country = (String) tab[0].subSequence(1, 3);
+		Log.d("", country);
 		String index = (String) tab[0].subSequence(3, 6);
 		if (index.equals("GSV")) {
 
@@ -26,14 +24,13 @@ public class SatelliteManager implements SkyListened {
 				if (longitude > 180)
 					longitude = longitude - 360;
 				
-				sky.updateSatellite(id, longitude, latitude);
+				sky.updateSatellite(id, longitude, latitude, country);
 			} catch (NumberFormatException ex) {
 				ex.printStackTrace();
 			}
 		
 		}
 		
-		updateListener(sky);
 	}
 	
 	public void updateViewPosition(double alpha, double beta, double gamma) {
@@ -46,28 +43,7 @@ public class SatelliteManager implements SkyListened {
 		if(view_latitude < -180)
 			view_latitude=90;
 		
-		Log.v("Debug", "Position de la vue \n"+view_longitude+"\n"+view_latitude);
 		sky.updateView(view_longitude, view_latitude);
-		updateListener(sky);
-		
-	}
-	
-	@Override
-	public void addListener(SkyListener listener) {
-		listeners.add(listener);
-		
-	}
-
-	@Override
-	public void deleteListener(SkyListener listener) {
-		listeners.remove(listener);
-		
-	}
-
-	@Override
-	public void updateListener(Sky sky) {
-		for(SkyListener listener : listeners)
-			listener.updateSky(sky);
 		
 	}
 
