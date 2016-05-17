@@ -2,10 +2,7 @@ package com.example.satellite;
 
 import java.util.Vector;
 
-import android.util.Log;
-
 import com.example.satellitetracker.Point;
-import com.example.socket.ConnectionSocket;
 
 /**
  * This class manager Satellite on sky and compute Satellite coordinate on screen's phone.
