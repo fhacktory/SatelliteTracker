@@ -15,14 +15,14 @@ import android.view.Display;
 import android.view.Window;
 import android.view.WindowManager;
 
-import com.example.satellite.SatelliteManager;
 import com.example.satellite.Sky;
+import com.example.satellite.SkyControler;
 import com.example.satellite.SkyListener;
 
 public class MainActivity extends Activity implements GpsStatus.NmeaListener, SkyListener {
 	
 	private LocationManager lm;
-	private SatelliteManager manager;
+	private SkyControler controler;
 	
 	private SensorManager sensorManager;
 	private Sensor accelerometer;
@@ -59,9 +59,9 @@ public class MainActivity extends Activity implements GpsStatus.NmeaListener, Sk
 	    //final Location location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
 	    lm.addNmeaListener(this);
 
-	    // Setup satellite manager
+	    // Setup sky and its controler
 	    Sky sky = new Sky();
-	    manager = new SatelliteManager(sky);
+	    controler = new SkyControler(sky);
 	    sky.addListener(this);
 	    
 	    // Setup Sensor
@@ -76,7 +76,7 @@ public class MainActivity extends Activity implements GpsStatus.NmeaListener, Sk
 	
 	@Override
 	public void onNmeaReceived(long timestamp, String nmea) {
-		manager.NmeaParser(nmea);
+		controler.NmeaParser(nmea);
 		
 	}
 
@@ -129,7 +129,7 @@ public class MainActivity extends Activity implements GpsStatus.NmeaListener, Sk
 				SensorManager.getRotationMatrix(R, I, accelerometerValues, magnetometerValues);
 				SensorManager.getOrientation(R, rotation);
 
-				manager.updateViewPosition(rotation[0], rotation[1], rotation[2]);
+				controler.updateViewPosition(rotation[0], rotation[1], rotation[2]);
 			}
 			
 		}
