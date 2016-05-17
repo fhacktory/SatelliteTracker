@@ -9,12 +9,17 @@ import android.graphics.Paint;
 import android.util.Log;
 import android.view.View;
 
+/**
+ * This class manage the painting on screen
+ * @author François Jolain
+ *
+ */
 public class DrawView extends View {
 	
 	private Paint paint;
 	private Vector<Point> points = new Vector<Point>();
-	private String text = "";
-	
+
+	// constant to convert angle received by sky into pixel on screen
 	private double angle2pixelX;
 	private double angle2pixelY;
 	
@@ -30,17 +35,21 @@ public class DrawView extends View {
 		
 	}
 
+	/**
+	 * Call back at every refresh screen
+	 */
 	@Override
 	protected void onDraw(Canvas canvas) {
 		super.onDraw(canvas);
-				
+	
+		// Paint a new black background
 		paint.setColor(Color.BLACK);
 		canvas.drawPaint(paint);
 		
-		paint.setAntiAlias(false);
+		
+		// Paint each point contained in the tab
 		for(Point point : points) {
 			paint.setColor(point.getColor());
-			
 			
 			int pixelX = (int) (point.getX()*angle2pixelX);
 			int pixelY = (int) (point.getY()*angle2pixelY);
@@ -49,15 +58,15 @@ public class DrawView extends View {
 		}
 	}
 	
+	/**
+	 * Set a new collection of point and ask a screen update
+	 * @param points collection of points
+	 */
 	public void setPoints(Vector<Point> points) {
 		this.points = points;
 		invalidate();
 	}
 	
-	public void setText(String text) {
-		this.text = text;
-		//invalidate();
-	}
 	
 	
 }

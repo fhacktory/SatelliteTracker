@@ -7,22 +7,37 @@ import android.util.Log;
 import com.example.satellitetracker.Point;
 import com.example.socket.ConnectionSocket;
 
-
+/**
+ * This class manager Satellite on sky and compute Satellite coordinate on screen's phone.
+ * It's build on a Observer pattern
+ * @author François Jolain
+ * @see SkyListener
+ * @see SkyListned
+ *
+ */
 public class Sky implements SkyListened{
 
     private Vector<Satellite> sat = new Vector<Satellite>();
-    private Vector<Point> points = new Vector<Point>();
 	private Vector<SkyListener> listeners = new Vector<SkyListener>();
 
 
     public Sky() {
     }
 
+    /**
+     * Update the satellite collection with the new satellite informations
+     * @param id satellite id
+     * @param longitude satellite longitude from -180 to 180 with south at 0
+     * @param latitude latitude satellite from 0 to 90 with equator at 0
+     * @param country two letters country name code
+     * @return
+     */
     public boolean updateSatellite(int id, double longitude, double latitude, String country) {
-      	    	
+      	
+    	// Check the satellite collection
         for(int i= 0; i<sat.size(); i++) {
         	
-        	
+        	// If a satellite share the same id, sky update values of this satellite
         	if(sat.get(i).getId()==id) {
         		sat.get(i).setLatitude(latitude);
         		sat.get(i).setLongitude(longitude);
@@ -31,12 +46,18 @@ public class Sky implements SkyListened{
         	}
         }
         
+        // Else no satellite is found. Satellite is added in collection
         sat.add(new Satellite(id, longitude, latitude, country));
         
         updateListener(this);
         return false;
     }
     
+    /**
+     * Update screen orientation pointed
+     * @param longitude longitude of the point on top at left on the screen
+     * @param latitude latitude of the point on the top at left on the screen
+     */
     public void updateView(double longitude, double latitude) {
     	
     	for(Satellite s : sat) {
@@ -46,7 +67,6 @@ public class Sky implements SkyListened{
     		double y = (s.getLatitude()-latitude);
     			
     		// Ajust x in specific situation
-    		// If screen landmark is near border +180|-180, in the positive side
     		if(longitude > 0 && s.getLongitude()<0)
     			x = (int) ((180-longitude)+(180+s.getLongitude()));
     		
@@ -56,9 +76,15 @@ public class Sky implements SkyListened{
     	
     	updateListener(this);
     }
-        
+    
+    /**
+     * Return the current collection of points
+     * @return collection of points
+     */
     public Vector<Point> getPoints() {
-    	points = new Vector<Point>();
+    	
+    	// Collection point is build only when program ask it
+    	Vector<Point>points = new Vector<Point>();
     	for(Satellite s : sat)
     		points.add(s.getPoint());
     	

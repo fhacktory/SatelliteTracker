@@ -5,6 +5,12 @@ import android.util.Log;
 
 import com.example.satellitetracker.Point;
 
+/**
+ * Record in a single place all important informations about on satellite.
+ * Coordinates are classical coordinates with Y axis to the top.
+ * @author Francois Jolain
+ *
+ */
 public class Satellite {
 	
 	private int id;
@@ -12,6 +18,7 @@ public class Satellite {
 	private double latitude;
 	private int country_color;
 	
+	// This coordinate and size on the screen
 	private double x;
 	private double y;
 	private int point_size = 20; // default size for satellite

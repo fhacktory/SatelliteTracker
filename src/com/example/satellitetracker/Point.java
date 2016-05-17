@@ -1,5 +1,11 @@
 package com.example.satellitetracker;
 
+/**
+ * Class to record in a single place all informations necessary to print a satellite on screen.
+ * Coordinates are screen coordinate with Y axis inverted.
+ * @author François Jolain
+ *
+ */
 public class Point {
 	private double x;
 	private double y;

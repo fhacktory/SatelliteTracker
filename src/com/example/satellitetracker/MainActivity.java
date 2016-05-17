@@ -1,6 +1,7 @@
 package com.example.satellitetracker;
 
 import android.app.Activity;
+
 import android.content.Context;
 import android.content.pm.ActivityInfo;
 import android.hardware.Sensor;
@@ -19,6 +20,11 @@ import com.example.satellite.Sky;
 import com.example.satellite.SkyControler;
 import com.example.satellite.SkyListener;
 
+/**
+ * Main program activity. It's the View component in MVC patern. Listen rotation sensor and NMEA sequences by GPS sensor.
+ * @author Francois Jolain
+ *
+ */
 public class MainActivity extends Activity implements GpsStatus.NmeaListener, SkyListener {
 	
 	private LocationManager lm;
@@ -45,7 +51,7 @@ public class MainActivity extends Activity implements GpsStatus.NmeaListener, Sk
 		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 				
-		
+		// Fetch display resolution to be used by DrawView
 		Display display = getWindowManager().getDefaultDisplay();
 		android.graphics.Point size = new android.graphics.Point();
 		display.getSize(size);
@@ -74,14 +80,24 @@ public class MainActivity extends Activity implements GpsStatus.NmeaListener, Sk
 	    
 	}
 	
+	/**
+	 * Implementation from GpsStatus.NmeaListener
+	 * Call back when a new NMEA sequence is received
+	 */
 	@Override
 	public void onNmeaReceived(long timestamp, String nmea) {
+		// Give the sentence to the controler
 		controler.NmeaParser(nmea);
 		
 	}
 
+	/**
+	 * Implementation from SkyListener.
+	 * Call back when satellite position from earth and satellite position from screen rotation changed.
+	 */
 	@Override
 	public void updateSky(Sky sky) {
+		// Ask a to draw a new screen with new points
 		draw.setPoints(sky.getPoints());
 	}
 	
@@ -89,12 +105,14 @@ public class MainActivity extends Activity implements GpsStatus.NmeaListener, Sk
 	@Override
 	protected void onPause() {
         super.onPause();
+        // Stop to listening rotation sensor
         sensorManager.unregisterListener(mySensorListener);
     }
 	
 	@Override
 	protected void onResume() {
 		super.onResume();
+		// Restart listening rotation sensor
 		sensorManager.registerListener(mySensorListener, accelerometer, SensorManager.SENSOR_DELAY_UI);
 	    sensorManager.registerListener(mySensorListener, magnetometer, SensorManager.SENSOR_DELAY_UI);
 	}
@@ -103,7 +121,12 @@ public class MainActivity extends Activity implements GpsStatus.NmeaListener, Sk
 	
 	
 	
-	
+	/**
+	 * Implements SensorEventListener.
+	 * Used to gathering new rotation sensor values.
+	 * @author francois
+	 *
+	 */
 	private class MySensorListener implements SensorEventListener {
 
 		@Override
@@ -116,12 +139,13 @@ public class MainActivity extends Activity implements GpsStatus.NmeaListener, Sk
 		public void onSensorChanged(SensorEvent se) {
 			
 			
-			
+			// Filter event by sensor actived
 			if(se.sensor.getType() == Sensor.TYPE_ACCELEROMETER)
 				accelerometerValues = se.values;
 			if(se.sensor.getType() == Sensor.TYPE_MAGNETIC_FIELD)
 				magnetometerValues = se.values;
 			
+			// Update rotation of the screen's phone
 			rotation = new float[3];
 			float[] R = new float[9];
 			float[] I = new float[9];
@@ -129,6 +153,7 @@ public class MainActivity extends Activity implements GpsStatus.NmeaListener, Sk
 				SensorManager.getRotationMatrix(R, I, accelerometerValues, magnetometerValues);
 				SensorManager.getOrientation(R, rotation);
 
+				// Send new rotation to the controler
 				controler.updateViewPosition(rotation[0], rotation[1], rotation[2]);
 			}
 			
@@ -139,30 +164,35 @@ public class MainActivity extends Activity implements GpsStatus.NmeaListener, Sk
 }
 	
 	
-	
+	/**
+	 * This class is necessary to be updated from new NMEA sequences. 
+	 * Not methods are used here.
+	 * @author François Jolain
+	 *
+	 */
 	private class MyLocationListener implements android.location.LocationListener {
 
 		@Override
 		public void onLocationChanged(Location location) {
-			// TODO Auto-generated method stub
+			// nothing
 			
 		}
 
 		@Override
 		public void onProviderDisabled(String provider) {
-			// TODO Auto-generated method stub
+			// nothing
 			
 		}
 
 		@Override
 		public void onProviderEnabled(String provider) {
-			// TODO Auto-generated method stub
+			// nothing
 			
 		}
 
 		@Override
 		public void onStatusChanged(String provider, int status, Bundle extras) {
-			// TODO Auto-generated method stub
+			// nothing
 			
 		}
 		
