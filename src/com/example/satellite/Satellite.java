@@ -1,6 +1,7 @@
 package com.example.satellite;
 
 import android.graphics.Color;
+import android.util.Log;
 
 import com.example.satellitetracker.Point;
 
@@ -34,7 +35,7 @@ public class Satellite {
 			country_color = Color.BLUE;
 		// Special country that doesn't exist, just to display a mock satellite on sky
 		else if(country.equals("MOCK")) {
-			country.equals(Color.MAGENTA);
+			country_color = Color.rgb(100, 100, 100); // light gray color
 			point_size = 10; // Its point is smaller than true satellite
 		}
 	

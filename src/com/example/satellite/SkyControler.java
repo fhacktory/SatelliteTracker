@@ -16,11 +16,11 @@ public class SkyControler {
 		this.sky = sky;
 		
 		for(int i = 0; i< 90; i++) {
-			sky.updateSatellite(1000+i, 0, i, "GP");
+			sky.updateSatellite(1000+i, 0, i, "MOCK");
 		}
 		
 		for(int i = -179; i< 179; i++) {
-			sky.updateSatellite(2000+i, i, 0, "GP");
+			sky.updateSatellite(2000+i, i, 0, "MOCK");
 		}
 	}
 	

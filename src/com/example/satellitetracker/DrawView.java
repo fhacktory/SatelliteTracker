@@ -45,7 +45,7 @@ public class DrawView extends View {
 			int pixelX = (int) (point.getX()*angle2pixelX);
 			int pixelY = (int) (point.getY()*angle2pixelY);
 			
-			canvas.drawCircle(pixelX, pixelY, 20, paint);
+			canvas.drawCircle(pixelX, pixelY, point.getSize(), paint);
 		}
 	}
 	
