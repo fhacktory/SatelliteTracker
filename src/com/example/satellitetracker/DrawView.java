@@ -6,6 +6,7 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.util.Log;
 import android.view.View;
 
 public class DrawView extends View {
@@ -14,10 +15,19 @@ public class DrawView extends View {
 	private Vector<Point> points = new Vector<Point>();
 	private String text = "";
 	
-	public DrawView(Context context) {
+	private double angle2pixelX;
+	private double angle2pixelY;
+	
+	public DrawView(Context context, int width, int height) {
 		super(context);
 		paint = new Paint();
 		paint.setStyle(Paint.Style.FILL);
+		
+		// A width screen represents a quart of sky longitude
+		angle2pixelX = width*4.0/360.0;
+		// A height screen represents a half of sky latitude
+		angle2pixelY = height*2.0/90.0;
+		
 	}
 
 	@Override
@@ -30,9 +40,13 @@ public class DrawView extends View {
 		paint.setAntiAlias(false);
 		for(Point point : points) {
 			paint.setColor(point.getColor());
-			canvas.drawCircle(point.getX()*40, point.getY()*10, 20, paint);
+			
+			
+			int pixelX = (int) (point.getX()*angle2pixelX);
+			int pixelY = (int) (point.getY()*angle2pixelY);
+			
+			canvas.drawCircle(pixelX, pixelY, 20, paint);
 		}
-		paint.setColor(Color.RED);
 	}
 	
 	public void setPoints(Vector<Point> points) {

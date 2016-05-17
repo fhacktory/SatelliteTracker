@@ -11,8 +11,9 @@ public class Satellite {
 	private double latitude;
 	private int country_color;
 	
-	private int x;
-	private int y;
+	private double x;
+	private double y;
+	private int point_size = 20; // default size for satellite
 	
 	public Satellite (int id, double longitude, double latitude, String country) {
 		this.id = id;
@@ -22,15 +23,21 @@ public class Satellite {
 		// GP for GPS : American
 		if(country.equals("GP"))
 			country_color = Color.WHITE;
-		// GN for GLONASS: Russian
-		if(country.equals("GN"))
+		// GL for GLONASS: Russian
+		else if(country.equals("GL"))
 			country_color = Color.GREEN;
-		// BD for Beidou or COMPASS : China
-		if(country.equals("BD"))
+		// BD or GB for Beidou or COMPASS : China
+		else if(country.equals("BD") || country.equals("GB"))
 			country_color = Color.RED;
-		// GL for GALILEO : European
-		if(country.equals("GL"))
+		// GA for GALILEO : European
+		else if(country.equals("GA"))
 			country_color = Color.BLUE;
+		// Special country that doesn't exist, just to display a mock satellite on sky
+		else if(country.equals("MOCK")) {
+			country.equals(Color.MAGENTA);
+			point_size = 10; // Its point is smaller than true satellite
+		}
+	
 		
 		x = 0;
 		y = 0;
@@ -82,14 +89,14 @@ public class Satellite {
 		this.latitude = latitude;
 	}
 	
-	public void setXY(int x, int y) {
+	public void setXY(double x, double y) {
 		this.x = x;
 		this.y = y;
 	}
 	
 	public Point getPoint() {
 		// Set -y because the y axe is inversed in screen landmark
-		return new Point(x,-y, country_color);
+		return new Point(x,-y, country_color, point_size);
 	}
 
 }

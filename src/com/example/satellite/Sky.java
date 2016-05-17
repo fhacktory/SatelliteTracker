@@ -22,10 +22,11 @@ public class Sky implements SkyListened{
       	    	
         for(int i= 0; i<sat.size(); i++) {
         	
-        	if(i == 0)
+        	
         	if(sat.get(i).getId()==id) {
         		sat.get(i).setLatitude(latitude);
         		sat.get(i).setLongitude(longitude);
+        		updateListener(this);
         		return true;
         	}
         }
@@ -40,15 +41,14 @@ public class Sky implements SkyListened{
     	
     	for(Satellite s : sat) {
     		
-    			
     		// Compute satellite coordinate in the main situation
-    		int x = (int) (s.getLongitude()-longitude);//(longitude_max-longitude)/2560 );
-    		int y = (int) (s.getLatitude()-latitude);//(latitude-latitude_max)/1440 );
+    		double x = (s.getLongitude()-longitude);
+    		double y = (s.getLatitude()-latitude);
     			
     		// Ajust x in specific situation
     		// If screen landmark is near border +180|-180, in the positive side
     		if(longitude > 0 && s.getLongitude()<0)
-    			x = (int) ((180-longitude)+(180-s.getLatitude()));
+    			x = (int) ((180-longitude)+(180+s.getLongitude()));
     		
     		s.setXY(x, y);
     		

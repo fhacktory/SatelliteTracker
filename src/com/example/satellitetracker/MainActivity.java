@@ -11,7 +11,7 @@ import android.location.GpsStatus;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
-import android.util.Log;
+import android.view.Display;
 import android.view.Window;
 import android.view.WindowManager;
 
@@ -34,16 +34,22 @@ public class MainActivity extends Activity implements GpsStatus.NmeaListener, Sk
 	private float rotation[];
 	private float accelerometerValues[];
 	private float magnetometerValues[];
+	
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		
 		// Use landscape orientation
 		this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
 		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 				
-		super.onCreate(savedInstanceState);
-		draw = new DrawView(this);
+		
+		Display display = getWindowManager().getDefaultDisplay();
+		android.graphics.Point size = new android.graphics.Point();
+		display.getSize(size);
+		draw = new DrawView(this, size.x, size.y);
 		setContentView(draw);
 		
 		

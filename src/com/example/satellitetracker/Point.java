@@ -1,25 +1,31 @@
 package com.example.satellitetracker;
 
 public class Point {
-	private int x;
-	private int y;
+	private double x;
+	private double y;
 	private int color;
+	private int size;
 	
-	public Point(int x, int y, int color) {
+	public Point(double x, double y, int color, int size) {
 		this.x = x;
 		this.y = y;
 		this.color = color;
+		this.size = size;
 	}
 	
-	public int getX() {
+	public double getX() {
 		return x;
 	}
 	
-	public int getY() {
+	public double getY() {
 		return y;
 	}
 	
 	public int getColor() {
 		return color;
+	}
+	
+	public int getSize() {
+		return size;
 	}
 }
